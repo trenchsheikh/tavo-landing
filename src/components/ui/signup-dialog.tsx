@@ -22,7 +22,6 @@ export const SignupDialog: React.FC<SignupDialogProps> = ({ mode, onClose }) => 
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [accepted, setAccepted] = useState(false);
-  const [scrolledToEnd, setScrolledToEnd] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const agreement = useMemo(
@@ -76,13 +75,6 @@ export const SignupDialog: React.FC<SignupDialogProps> = ({ mode, onClose }) => 
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const el = e.currentTarget;
-    if (el.scrollHeight - el.scrollTop - el.clientHeight < 40) {
-      setScrolledToEnd(true);
     }
   };
 
@@ -194,11 +186,10 @@ export const SignupDialog: React.FC<SignupDialogProps> = ({ mode, onClose }) => 
           <div className="flex flex-col min-h-0 flex-1">
             <div className="px-6 pt-4 pb-2">
               <p className="text-sm text-gray-400 font-space">
-                Please review the pilot agreement below. Scroll to the end to accept.
+                Please review the pilot agreement below.
               </p>
             </div>
             <div
-              onScroll={handleScroll}
               className="flex-1 overflow-y-auto px-6 py-4 mx-6 mb-4 rounded-xl border border-gray-800 bg-gray-900/40"
             >
               {agreement.map((block, i) => {
@@ -231,11 +222,7 @@ export const SignupDialog: React.FC<SignupDialogProps> = ({ mode, onClose }) => 
               })}
             </div>
             <div className="px-6 pb-6 border-t border-gray-800 pt-4 space-y-4">
-              <label
-                className={`flex items-start gap-3 cursor-pointer select-none ${
-                  scrolledToEnd ? '' : 'opacity-50 pointer-events-none'
-                }`}
-              >
+              <label className="flex items-start gap-3 cursor-pointer select-none">
                 <span
                   className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-colors ${
                     accepted ? 'bg-white border-white' : 'border-gray-600 bg-transparent'
@@ -253,9 +240,6 @@ export const SignupDialog: React.FC<SignupDialogProps> = ({ mode, onClose }) => 
                   I have read and agree to the Tavo Pilot Agreement on behalf of {restaurantName.trim() || 'my restaurant'}.
                 </span>
               </label>
-              {!scrolledToEnd && (
-                <p className="text-[11px] text-gray-500 font-space">Scroll to the bottom of the agreement to enable acceptance.</p>
-              )}
               <button
                 onClick={handleAcceptContract}
                 disabled={!accepted || isSubmitting}
