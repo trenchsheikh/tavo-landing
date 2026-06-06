@@ -82,7 +82,7 @@ export const Component: React.FC = () => {
       <GradientBars />
       <Navbar />
 
-      <div className="relative z-10 text-center w-full max-w-4xl mx-auto flex flex-col items-center justify-center min-h-screen py-12 sm:py-16">
+      <div className="relative z-10 text-center w-full max-w-4xl mx-auto flex flex-col items-center justify-center min-h-screen pt-28 pb-12 sm:pt-32 sm:pb-16">
         <h1 className="w-full text-white leading-tight tracking-tight mb-5 sm:mb-6 animate-fadeIn px-4">
           <span className="block font-inter font-medium text-[clamp(1.5rem,5.5vw,3.75rem)] text-balance">
             Revolutionizing Restaurants,
@@ -128,6 +128,23 @@ export const Component: React.FC = () => {
             <img
               src="/gordon-ramsay-demo.jpeg"
               alt="Tavo team on a Zoom call with Gordon Ramsay, demoing the product"
+              className="w-full h-auto object-cover"
+              loading="lazy"
+            />
+          </div>
+          <figcaption className="mt-2 text-[0.65rem] text-gray-600/70 font-space tracking-wide">
+            Dramatization — AI-generated, not a real call.
+          </figcaption>
+        </figure>
+
+        <figure className="mt-8 sm:mt-10 w-full max-w-sm px-4 animate-fadeIn animation-delay-300">
+          <p className="mb-3 text-[clamp(0.8rem,2.2vw,0.95rem)] text-gray-300 font-space">
+            And this is us talking to Jamie Oliver.
+          </p>
+          <div className="relative overflow-hidden rounded-xl border border-gray-700/60 shadow-2xl ring-1 ring-black/40">
+            <img
+              src="/jamie-oliver-demo.jpeg"
+              alt="Tavo team on a Zoom call with Jamie Oliver, demoing the product"
               className="w-full h-auto object-cover"
               loading="lazy"
             />
