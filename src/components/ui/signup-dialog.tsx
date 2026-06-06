@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Check, Loader2, X } from 'lucide-react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Check, ChevronsDown, Loader2, X } from 'lucide-react';
 import { buildAgreement } from '@/lib/pilot-agreement';
 import { insertSignup } from '@/lib/supabase';
 
@@ -22,7 +22,9 @@ export const SignupDialog: React.FC<SignupDialogProps> = ({ mode, onClose }) => 
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [accepted, setAccepted] = useState(false);
+  const [atBottom, setAtBottom] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const agreement = useMemo(
     () => buildAgreement({ restaurantName, city }),
@@ -189,9 +191,15 @@ export const SignupDialog: React.FC<SignupDialogProps> = ({ mode, onClose }) => 
                 Please review the pilot agreement below.
               </p>
             </div>
-            <div
-              className="flex-1 overflow-y-auto px-6 py-4 mx-6 mb-4 rounded-xl border border-gray-800 bg-gray-900/40"
-            >
+            <div className="relative flex-1 min-h-0 mx-6 mb-4">
+              <div
+                ref={scrollRef}
+                onScroll={(e) => {
+                  const el = e.currentTarget;
+                  setAtBottom(el.scrollHeight - el.scrollTop - el.clientHeight < 30);
+                }}
+                className="h-full overflow-y-auto px-4 py-4 rounded-xl border border-gray-800 bg-gray-900/40"
+              >
               {agreement.map((block, i) => {
                 if (block.type === 'title') {
                   return (
@@ -220,6 +228,16 @@ export const SignupDialog: React.FC<SignupDialogProps> = ({ mode, onClose }) => 
                   </p>
                 );
               })}
+              </div>
+              {!atBottom && (
+                <button
+                  onClick={() => scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })}
+                  className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-800 border border-gray-700 text-xs text-gray-300 font-space hover:bg-gray-700 transition-colors"
+                >
+                  <ChevronsDown size={13} />
+                  Scroll to bottom
+                </button>
+              )}
             </div>
             <div className="px-6 pb-6 border-t border-gray-800 pt-4 space-y-4">
               <label className="flex items-start gap-3 cursor-pointer select-none">
