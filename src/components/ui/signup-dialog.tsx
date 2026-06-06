@@ -43,6 +43,15 @@ export const SignupDialog: React.FC<SignupDialogProps> = ({ mode, onClose }) => 
     };
   }, [onClose]);
 
+  useEffect(() => {
+    if (step !== 'contract') return;
+    setAtBottom(false);
+    requestAnimationFrame(() => {
+      const el = scrollRef.current;
+      if (el && el.scrollHeight <= el.clientHeight) setAtBottom(true);
+    });
+  }, [step]);
+
   const formValid =
     restaurantName.trim().length > 0 &&
     city.trim().length > 0 &&
@@ -186,60 +195,55 @@ export const SignupDialog: React.FC<SignupDialogProps> = ({ mode, onClose }) => 
 
         {step === 'contract' && (
           <div className="flex flex-col min-h-0 flex-1">
-            <div className="px-6 pt-4 pb-2">
-              <p className="text-sm text-gray-400 font-space">
-                Please review the pilot agreement below.
-              </p>
+            <div className="px-6 pt-4 pb-3">
+              <p className="text-sm text-gray-400 font-space">Review the pilot agreement below.</p>
             </div>
-            <div className="relative flex-1 min-h-0 mx-6 mb-4">
-              <div
-                ref={scrollRef}
-                onScroll={(e) => {
-                  const el = e.currentTarget;
-                  setAtBottom(el.scrollHeight - el.scrollTop - el.clientHeight < 30);
-                }}
-                className="h-full overflow-y-auto px-4 py-4 rounded-xl border border-gray-800 bg-gray-900/40"
-              >
+
+            <div
+              ref={scrollRef}
+              onScroll={(e) => {
+                const el = e.currentTarget;
+                setAtBottom(el.scrollHeight - el.scrollTop - el.clientHeight < 30);
+              }}
+              className="flex-1 overflow-y-auto mx-6 px-4 py-4 rounded-xl border border-gray-800 bg-gray-900/40"
+            >
               {agreement.map((block, i) => {
-                if (block.type === 'title') {
-                  return (
-                    <h2 key={i} className="text-white font-bold text-lg font-space text-center mb-1">
-                      {block.text}
-                    </h2>
-                  );
-                }
-                if (block.type === 'heading') {
-                  return (
-                    <h3 key={i} className="text-white font-semibold text-sm tracking-wide font-space mt-5 mb-1">
-                      {block.text}
-                    </h3>
-                  );
-                }
-                if (block.type === 'subheading') {
-                  return (
-                    <h4 key={i} className="text-white font-semibold text-sm font-space mt-4 mb-1">
-                      {block.text}
-                    </h4>
-                  );
-                }
+                if (block.type === 'title') return (
+                  <h2 key={i} className="text-white font-bold text-base font-space text-center mb-3">
+                    {block.text}
+                  </h2>
+                );
+                if (block.type === 'heading') return (
+                  <h3 key={i} className="text-white font-semibold text-sm tracking-wide font-space mt-5 mb-1">
+                    {block.text}
+                  </h3>
+                );
+                if (block.type === 'subheading') return (
+                  <h4 key={i} className="text-white font-semibold text-xs font-space mt-4 mb-1 uppercase tracking-wider text-gray-300">
+                    {block.text}
+                  </h4>
+                );
                 return (
                   <p key={i} className="text-xs text-gray-400 leading-relaxed font-space mb-2">
                     {block.text}
                   </p>
                 );
               })}
-              </div>
-              {!atBottom && (
+            </div>
+
+            {!atBottom && (
+              <div className="mx-6 mt-3">
                 <button
                   onClick={() => scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })}
-                  className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-800 border border-gray-700 text-xs text-gray-300 font-space hover:bg-gray-700 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-gray-700 bg-gray-900/60 text-xs text-gray-300 font-space hover:border-gray-500 hover:text-white transition-all duration-200"
                 >
-                  <ChevronsDown size={13} />
+                  <ChevronsDown size={14} />
                   Scroll to bottom
                 </button>
-              )}
-            </div>
-            <div className="px-6 pb-6 border-t border-gray-800 pt-4 space-y-4">
+              </div>
+            )}
+
+            <div className="px-6 pb-6 border-t border-gray-800 mt-4 pt-4 space-y-4">
               <label className="flex items-start gap-3 cursor-pointer select-none">
                 <span
                   className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-colors ${
