@@ -6,11 +6,11 @@ export type AgreementBlock =
 
 const RAW = `@@title@@Tavo Pilot Agreement
 @@subheading@@The pilot
-@@paragraph@@Free for 1 week — a refundable £49 deposit holds your slot.
+@@paragraph@@Free for 1 week — a £49 pilot fee secures your slot.
 @@subheading@@Terms
 @@paragraph@@No obligation after; no competing platform during the pilot.
 @@subheading@@Your data
-@@paragraph@@You keep your menu and branding; data is never sold. Liability is capped at the deposit, under English law.`;
+@@paragraph@@You keep your menu and branding; data is never sold. Liability is capped at the pilot fee, under English law.`;
 
 export interface CompanyInfo {
   restaurantName: string;
